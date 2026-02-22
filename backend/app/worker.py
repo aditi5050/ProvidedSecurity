@@ -1,7 +1,18 @@
-import redis, json, time
+import redis
+import json
+import time
+import os
+from dotenv import load_dotenv
 
-r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+# Load the hidden .env file
+load_dotenv()
+
+# Safely get the URL without hardcoding the password!
+REDIS_URL = os.environ.get("REDIS_URL")
+r = redis.from_url(REDIS_URL, decode_responses=True)
+
 print("👷 SENTINEL WORKER ACTIVE. Processing Queue...")
+# ... rest of your code stays exactly the same
 
 while True:
     task = r.brpop("orders_queue", timeout=1)
